@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<title>ChatBot</title>
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <style>
+    body {
+      font-family: monospace;
+    }
+
+    h1 {
+      background-color: #8080ff;
+      color: black;
+      display: inline-block;
+      font-size: 2em;
+      font-style: bold;
+      margin: 0;
+      padding: 10px;
+      border-radius: 5px;
+
+    }
+
+    #chatbox {
+      margin-left: auto;
+      margin-right: auto;
+      width: 40%;
+      margin-top: 60px;
+    }
+
+    #userInput {
+      margin-left: auto;
+      margin-right: auto;
+      width: 40%;
+      margin-top: 60px;
+    }
+
+    #textInput {
+      width: 90%;
+      border: none;
+      border-bottom: 3px solid black;
+      font-family: monospace;
+      font-size: 17px;
+    }
+
+    .userText {
+      color: rgb(255, 255, 255);
+      font-family: monospace;
+      font-size: 17px;
+      text-align: right;
+      line-height: 30px;
+    }
+
+    .userText span {
+      background-color: #040999;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .botText {
+      color: black;
+      font-family: monospace;
+      font-size: 17px;
+      text-align: left;
+      line-height: 30px;
+    }
+
+    .botText span {
+      background-color: #e2ebf0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #tidbit {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 300px;
+    }
+
+    .boxed {
+      margin-left: auto;
+      margin-right: auto;
+      width: 78%;
+      margin-top: 60px;
+      border: 1px solid rgb(3, 3, 138);
+    }
+
+    .box {
+      border: 2px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <center>
+    <h1>
+      SymptoSense
+    </h1>
+  </center>
+  <div class="box"></div>
+  <div class="boxed">
+    <div>
+      <div id="chatbox">
+        <p class="botText">
+          <span>Welcome to the AI Diagnosis Chatbot! I'm here to help you assess your symptoms and provide insights into
+            possible conditions or syndromes you may be experiencing. Please note that I am an AI language model and not
+            a substitute for professional medical advice. It's always recommended to consult with a qualified healthcare
+            professional for an accurate diagnosis and treatment. That being said, I'm here to listen and assist you to
+            the best of my abilities. How can I assist you today?What problems and syndromes do you have?</span>
+        </p>
+      </div>
+      <div id="userInput">
+        <input id="textInput" type="text" name="msg" placeholder="Enter message here..." />
+      </div>
+    </div>
+    <script>
+      function getBotResponse() {
+        var rawText = $("#textInput").val();
+        var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+        $.get("/get", { msg: rawText }).done(function (data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          document
+            .getElementById("userInput")
+            .scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      }
+      $("#textInput").keypress(function (e) {
+        if (e.which == 13) {
+          getBotResponse();
+        }
+      });
+    </script>
+  </div>
+</body>
+
+</html>
